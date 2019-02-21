@@ -34,7 +34,15 @@ function handleGetMovies(req, res) {
   }
 
   if (req.query.country){
-    response = response.filiter(item => item.county.toLowerCase().includes(req.query.country.toLowerCase()));
+    response = response.filter(item => item.county.toLowerCase().includes(req.query.country.toLowerCase()));
+  }
+
+  if (req.query.avgvote) {
+    const queryAvgVote = parseFloat(req.query.avgvote);
+    if (queryAvgVote.isNan()) {
+      res.status(400).send('Supplied avg. vote value must be a number');
+    }
+    response = response.filter(item => item.avg_vote >= queryAvgVote);
   }
 
   res.send(response);

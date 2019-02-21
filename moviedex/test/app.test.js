@@ -35,22 +35,46 @@ describe('GET /movie', () => {
         });
     });
   });
-});
 
-describe('Filter by Country', () => {
-  it('should return an array of movies filtered by country', () => {
-    return getRequest
-      .send({country: 'mex'})
-      .expect(200)
-      .expect('content-type', /json/)
-      .then(resp => {
-        let i = 0;
-        let countriesFiltered = true;
-        while (countriesFiltered && i < resp.length) {
-          countriesFiltered = countriesFiltered && resp[i].country.toLowerCase().includes('mex');
-          i++
-        }
-        expect(countriesFiltered).to.be.true;
-      })
-  })
-})
+  describe('Filter by Country', () => {
+    it('should return an array of movies filtered by country', () => {
+      return getRequest
+        .send({country: 'mex'})
+        .expect(200)
+        .expect('content-type', /json/)
+        .then(resp => {
+          let i = 0;
+          let countriesFiltered = true;
+          while (countriesFiltered && i < resp.length) {
+            countriesFiltered = countriesFiltered && resp[i].country.toLowerCase().includes('mex');
+            i++;
+          }
+          expect(countriesFiltered).to.be.true;
+        });
+    });
+  });
+
+  describe('Filter by Avg. Vote', () => {
+    it('should return an array of movies filtered by avg vote (greater than or equal to)', () => {
+      return getRequest
+        .send({avgvote: '2.134'})
+        .expect(200)
+        .expect('content-type', /json/)
+        .then(resp => {
+          let i = 0;
+          let votesFiltered = true;
+          while (votesFiltered && i < resp.length) {
+            votesFiltered = votesFiltered && resp[i].avg_vote >= 2.134;
+            i++;
+          }
+          expect(votesFiltered).to.be.true;
+        });
+    });
+
+    it('should return an error if provided avgvote is not a number', () => {
+      return getRequest
+        .send({avgvote: 'asdf'})
+        .expect(400, 'Supplied avg. vote value must be a number');
+    });
+  });
+});
