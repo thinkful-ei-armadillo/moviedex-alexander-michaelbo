@@ -33,9 +33,17 @@ function handleGetMovies(req, res) {
     response = response.filter(item => item.genre.toLowerCase().includes(req.query.genre.toLowerCase()));
   }
 
+  if (req.query.country){
+    response = response.filiter(item => item.county.toLowerCase().includes(req.query.country.toLowerCase()));
+  }
+
   res.send(response);
 }
 
+
+
 app.get('/movie', handleGetMovies);
+
+
 
 module.exports = app;

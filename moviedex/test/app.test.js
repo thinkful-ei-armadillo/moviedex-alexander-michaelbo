@@ -36,3 +36,21 @@ describe('GET /movie', () => {
     });
   });
 });
+
+describe('Filter by Country', () => {
+  it('should return an array of movies filtered by country', () => {
+    return getRequest
+      .send({country: 'mex'})
+      .expect(200)
+      .expect('content-type', /json/)
+      .then(resp => {
+        let i = 0;
+        let countriesFiltered = true;
+        while (countriesFiltered && i < resp.length) {
+          countriesFiltered = countriesFiltered && resp[i].country.toLowerCase().includes('mex');
+          i++
+        }
+        expect(countriesFiltered).to.be.true;
+      })
+  })
+})
